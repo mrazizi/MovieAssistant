@@ -14,12 +14,16 @@ class DBAPI():
 
     def saveMovieListToDB(self, movieList):
         for movieName in movieList:
-            sql = "INSERT INTO directoryMovie(movieName) VALUES ('%s')" % (movieName)
+            sql = """
+            INSERT INTO directoryMovie(movieName)
+            SELECT * FROM (SELECT ('%s')) AS tmp
+            WHERE NOT EXISTS (
+            SELECT movieName FROM directoryMovie WHERE movieName = ('%s')
+            ) LIMIT 1; """ % (movieName, movieName)
 
             try:
                 self.cur.execute(sql)
                 self.db.commit()
-
             except:
                 self.db.rollback()
 
