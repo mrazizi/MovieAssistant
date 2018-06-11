@@ -1,4 +1,5 @@
 import MySQLdb
+from imdb_api import IMDBMovie
 
 class DBAPI():
 
@@ -27,4 +28,31 @@ class DBAPI():
             except:
                 self.db.rollback()
 
-        self.db.close()
+        # self.db.close()
+
+    def updateMovieIDs(self):
+        imdbMovie = IMDBMovie()
+        sql = "SELECT movieName FROM directoryMovie"
+        results = 0
+
+        try:
+            self.cur.execute(sql)
+            results = self.cur.fetchall()
+            for movieName in results:
+                movieID = imdbMovie.getMovieID(movieName[0])
+
+                sql = "UPDATE directoryMovie SET movieID = ('%s') WHERE movieName = ('%s')" %(movieID, movieName[0])
+
+                try:
+                    self.cur.execute(sql)
+                    self.db.commit()
+
+                    print(movieName[0])
+                    print(movieID)
+                    print()
+
+                except:
+                    self.db.rollback()
+
+        except:
+            print("Error: Can't fetch data from database")
