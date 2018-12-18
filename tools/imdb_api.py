@@ -24,18 +24,19 @@ class IMDBMovie():
         imdbResult = self.ia.search_movie(movieName)
         return imdbResult[0].movieID
 
-    def getMovieInfo(self, movieName):
-        imdbResult = self.ia.get_movie(movieName)
+    def getMovieInfo(self, MovieID):
+        imdbResult = self.ia.get_movie(MovieID)
 
         self.title = imdbResult.get('title')
         self.year = imdbResult.get('year')
         if(imdbResult.get('rating')): self.rating = imdbResult.get('rating')
-        if(imdbResult.get('runtimes')): self.runtimes = imdbResult.get('runtimes')
+        if(imdbResult.get('runtimes')): self.runtimes = imdbResult.get('runtimes')[0]
         if(imdbResult.get('genres')): self.genres = imdbResult.get('genres')
         if(imdbResult.get('plot outline')): self.plotOutline = imdbResult.get('plot outline')
         if(imdbResult.get('director')): self.director = imdbResult.get('director')
         if(imdbResult.get('producer')): self.producer = imdbResult.get('producer')
         if(imdbResult.get('cast')): self.cast = imdbResult.get('cast')
+
 
     def printMovieInfo(self):
         print("Title: " + str(self.title))
